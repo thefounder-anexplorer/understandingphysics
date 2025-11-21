@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Pembelajaran Fisika</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #f0f0f0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #4fc3f7;
+        }
+
+        .logo {
+            text-align: left;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #4fc3f7;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #bbdefb;
+        }
+
+        .login-container {
+            position: relative;
+        }
+
+        .login-btn {
+            background: #0288d1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: #0277bd;
+        }
+
+        .login-modal {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: rgba(13, 71, 161, 0.95);
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #0288d1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0277bd;
+        }
+
+        .btn-danger {
+            background: #d32f2f;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+
+        .btn-edit {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #f57c00;
+        }
+
+        .admin-panel {
+            display: none;
+            background: rgba(2, 119, 189, 0.9);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-panel h2 {
+            margin-bottom: 20px;
+            color: #e1f5fe;
+            border-bottom: 2px solid #4fc3f7;
+            padding-bottom: 10px;
+        }
+
+        .add-link-form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .add-link-form input {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .resources-section {
+            background: rgba(21, 101, 192, 0.85);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .resources-section h2 {
+            margin-bottom: 20px;
+            color: #e1f5fe;
+            border-bottom: 2px solid #4fc3f7;
+            padding-bottom: 10px;
+        }
+
+        .resource-list {
+            list-style-type: none;
+        }
+
+        .resource-item {
+            background: rgba(30, 136, 229, 0.7);
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .resource-item:hover {
+            background: rgba(30, 136, 229, 0.9);
+        }
+
+        .resource-content {
+            flex: 1;
+        }
+
+        .resource-item a {
+            color: #e1f5fe;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .resource-item a:hover {
+            text-decoration: underline;
+        }
+
+        .resource-description {
+            color: #bbdefb;
+            font-size: 0.95rem;
+        }
+
+        .resource-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .logout-btn {
+            display: none;
+            margin-top: 20px;
+            background: #d32f2f;
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: #b71c1c;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #bbdefb;
+            font-size: 0.9rem;
+        }
+
+        .edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .edit-form {
+            background: rgba(13, 71, 161, 0.95);
+            padding: 25px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .edit-form h3 {
+            margin-bottom: 20px;
+            color: #e1f5fe;
+        }
+
+        .edit-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .edit-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .login-container {
+                margin-top: 15px;
+            }
+            
+            .login-modal {
+                width: 250px;
+                right: -50px;
+            }
+            
+            .resource-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .resource-actions {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>Portal Pembelajaran Fisika</h1>
+                <p class="subtitle">Sumber belajar fisika untuk siswa dan pelajar otodidak</p>
+            </div>
+            <div class="login-container">
+                <button class="login-btn" id="loginBtn">Login Admin</button>
+                <div class="login-modal" id="loginModal">
+                    <h3>Login Admin</h3>
+                    <form class="login-form" id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" placeholder="Masukkan username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" placeholder="Masukkan password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
+        </header>
+
+        <section class="admin-panel" id="adminPanel">
+            <h2>Panel Admin - Kelola Sumber Belajar</h2>
+            <form class="add-link-form" id="addLinkForm">
+                <input type="text" id="linkTitle" placeholder="Judul sumber belajar" required>
+                <input type="url" id="linkUrl" placeholder="URL sumber belajar" required>
+                <input type="text" id="linkDescription" placeholder="Deskripsi singkat" required>
+                <button type="submit" class="btn btn-primary">Tambah Sumber Belajar</button>
+            </form>
+            <button class="btn logout-btn" id="logoutBtn">Logout</button>
+        </section>
+
+        <section class="resources-section">
+            <h2>Sumber Belajar Fisika</h2>
+            <ul class="resource-list" id="resourceList">
+                <li class="resource-item" data-id="1">
+                    <div class="resource-content">
+                        <a href="https://www.khanacademy.org/science/physics" target="_blank">Khan Academy - Fisika</a>
+                        <p class="resource-description">Kursus fisika komprehensif dengan video dan latihan interaktif.</p>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-edit edit-btn">Edit</button>
+                        <button class="btn btn-danger delete-btn">Hapus</button>
+                    </div>
+                </li>
+                <li class="resource-item" data-id="2">
+                    <div class="resource-content">
+                        <a href="https://phet.colorado.edu/en/simulations/filter?subjects=physics" target="_blank">PhET Simulations - Fisika</a>
+                        <p class="resource-description">Simulasi interaktif untuk memahami konsep fisika secara visual.</p>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-edit edit-btn">Edit</button>
+                        <button class="btn btn-danger delete-btn">Hapus</button>
+                    </div>
+                </li>
+                <li class="resource-item" data-id="3">
+                    <div class="resource-content">
+                        <a href="https://www.physicsclassroom.com/" target="_blank">Physics Classroom</a>
+                        <p class="resource-description">Tutorial dan sumber belajar fisika untuk berbagai tingkat pendidikan.</p>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-edit edit-btn">Edit</button>
+                        <button class="btn btn-danger delete-btn">Hapus</button>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <div class="edit-modal" id="editModal">
+            <div class="edit-form">
+                <h3>Edit Sumber Belajar</h3>
+                <form id="editLinkForm">
+                    <input type="text" id="editLinkTitle" placeholder="Judul sumber belajar" required>
+                    <input type="url" id="editLinkUrl" placeholder="URL sumber belajar" required>
+                    <input type="text" id="editLinkDescription" placeholder="Deskripsi singkat" required>
+                    <div class="edit-actions">
+                        <button type="button" class="btn btn-danger" id="cancelEdit">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2023 Portal Pembelajaran Fisika. Semua hak cipta dilindungi.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginBtn = document.getElementById('loginBtn');
+            const loginModal = document.getElementById('loginModal');
+            const loginForm = document.getElementById('loginForm');
+            const adminPanel = document.getElementById('adminPanel');
+            const addLinkForm = document.getElementById('addLinkForm');
+            const resourceList = document.getElementById('resourceList');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const editModal = document.getElementById('editModal');
+            const editLinkForm = document.getElementById('editLinkForm');
+            const cancelEditBtn = document.getElementById('cancelEdit');
+
+            // Kredensial login
+            const validUsername = 'physicist';
+            const validPassword = 'bismillah';
+
+            // Variabel untuk menyimpan data yang sedang diedit
+            let currentEditId = null;
+
+            // Tampilkan modal login saat tombol login diklik
+            loginBtn.addEventListener('click', function() {
+                loginModal.style.display = loginModal.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Sembunyikan modal login saat klik di luar modal
+            document.addEventListener('click', function(e) {
+                if (!loginModal.contains(e.target) && e.target !== loginBtn) {
+                    loginModal.style.display = 'none';
+                }
+            });
+
+            // Event listener untuk form login
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (username === validUsername && password === validPassword) {
+                    // Login berhasil
+                    loginModal.style.display = 'none';
+                    adminPanel.style.display = 'block';
+                    logoutBtn.style.display = 'block';
+                    loginBtn.textContent = 'Admin';
+                    
+                    // Tampilkan tombol edit/hapus pada semua resource
+                    document.querySelectorAll('.resource-actions').forEach(action => {
+                        action.style.display = 'flex';
+                    });
+                } else {
+                    alert('Username atau password salah!');
+                }
+            });
+
+            // Event listener untuk form tambah link
+            addLinkForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('linkTitle').value;
+                const url = document.getElementById('linkUrl').value;
+                const description = document.getElementById('linkDescription').value;
+                
+                // Generate ID unik
+                const id = Date.now();
+                
+                // Buat elemen list baru
+                const newResourceItem = document.createElement('li');
+                newResourceItem.className = 'resource-item';
+                newResourceItem.setAttribute('data-id', id);
+                newResourceItem.innerHTML = `
+                    <div class="resource-content">
+                        <a href="${url}" target="_blank">${title}</a>
+                        <p class="resource-description">${description}</p>
+                    </div>
+                    <div class="resource-actions" style="display: flex;">
+                        <button class="btn btn-edit edit-btn">Edit</button>
+                        <button class="btn btn-danger delete-btn">Hapus</button>
+                    </div>
+                `;
+                
+                // Tambahkan ke daftar
+                resourceList.appendChild(newResourceItem);
+                
+                // Tambahkan event listener untuk tombol edit dan hapus
+                addResourceEventListeners(newResourceItem);
+                
+                // Reset form
+                addLinkForm.reset();
+                
+                alert('Sumber belajar berhasil ditambahkan!');
+            });
+
+            // Event listener untuk logout
+            logoutBtn.addEventListener('click', function() {
+                adminPanel.style.display = 'none';
+                logoutBtn.style.display = 'none';
+                loginBtn.textContent = 'Login Admin';
+                
+                // Sembunyikan tombol edit/hapus pada semua resource
+                document.querySelectorAll('.resource-actions').forEach(action => {
+                    action.style.display = 'none';
+                });
+            });
+
+            // Event listener untuk tombol edit dan hapus pada resource yang sudah ada
+            document.querySelectorAll('.resource-item').forEach(item => {
+                addResourceEventListeners(item);
+            });
+
+            // Event listener untuk form edit
+            editLinkForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('editLinkTitle').value;
+                const url = document.getElementById('editLinkUrl').value;
+                const description = document.getElementById('editLinkDescription').value;
+                
+                // Update resource yang sedang diedit
+                const resourceItem = document.querySelector(`.resource-item[data-id="${currentEditId}"]`);
+                resourceItem.querySelector('a').textContent = title;
+                resourceItem.querySelector('a').href = url;
+                resourceItem.querySelector('.resource-description').textContent = description;
+                
+                // Sembunyikan modal edit
+                editModal.style.display = 'none';
+                
+                alert('Perubahan berhasil disimpan!');
+            });
+
+            // Event listener untuk tombol batal pada modal edit
+            cancelEditBtn.addEventListener('click', function() {
+                editModal.style.display = 'none';
+            });
+
+            // Fungsi untuk menambahkan event listener pada resource item
+            function addResourceEventListeners(resourceItem) {
+                const editBtn = resourceItem.querySelector('.edit-btn');
+                const deleteBtn = resourceItem.querySelector('.delete-btn');
+                
+                editBtn.addEventListener('click', function() {
+                    // Ambil data resource yang akan diedit
+                    const title = resourceItem.querySelector('a').textContent;
+                    const url = resourceItem.querySelector('a').href;
+                    const description = resourceItem.querySelector('.resource-description').textContent;
+                    
+                    // Isi form edit dengan data yang ada
+                    document.getElementById('editLinkTitle').value = title;
+                    document.getElementById('editLinkUrl').value = url;
+                    document.getElementById('editLinkDescription').value = description;
+                    
+                    // Simpan ID resource yang sedang diedit
+                    currentEditId = resourceItem.getAttribute('data-id');
+                    
+                    // Tampilkan modal edit
+                    editModal.style.display = 'flex';
+                });
+                
+                deleteBtn.addEventListener('click', function() {
+                    if (confirm('Apakah Anda yakin ingin menghapus sumber belajar ini?')) {
+                        resourceItem.remove();
+                        alert('Sumber belajar berhasil dihapus!');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
